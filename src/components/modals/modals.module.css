@@ -1,0 +1,109 @@
+.modal,
+.modalWithAnimation{
+    position: absolute;
+    background-color: white;
+    max-width: 450px;
+    min-width: 300px;
+    width: 80%;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.modalWithAnimation{
+    animation: renderModalAnimation 0.3s ease-in;
+}
+
+@keyframes renderModalAnimation {
+    0% { opacity: 0; transform: translate(-50%, -60%); }
+    100% { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.window, .overlay{
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.overlay{
+    background: rgba(49, 49, 49, 0.8);
+}
+
+.close{
+    cursor: pointer;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+    border-bottom: 1px solid var(--breakline-color);
+}
+
+.successAlert{
+    background-color: rgb(178, 243, 178);
+    margin-bottom: 1.5em;
+    border-radius: 10px;
+    padding: 0.5em;
+    border: 1px solid green;
+    color: green;
+}
+
+.error{
+    padding: 0.3em;
+    width: 100%;
+    height: 1.5em;
+    color: red;
+    margin: 0;
+    text-align: center;
+}
+
+.button,
+.addTodoButton{
+    display: block;
+    height: 2.5em;
+    padding: 5px 20px;
+    border-radius: 10px;
+    width: 100%;
+    border: none;
+    background-color: var(--bg-button);
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.addTodoButton{
+    float: right;
+    max-width: 150px;
+    margin-bottom: 0px;
+}
+
+.button:hover,
+.addTodoButton:hover{
+    background-color: var(--bg-hover-button);
+}
+
+.link{
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+

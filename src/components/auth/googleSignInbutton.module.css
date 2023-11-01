@@ -1,0 +1,50 @@
+.googleButton{
+    background-color: #131314;
+    color: #FFFFFF;
+    padding: 10px 12px 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.googleButton:hover{
+    background-color: #2b2b2e;
+}
+
+.googleText{
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.textBetweenLines{
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 0.5em;
+}
+
+.textBetweenLines:before,
+.textBetweenLines:after{
+    background-color: lightgray;
+    content: "";
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 50%;
+}
+
+.textBetweenLines:before{
+    right: 0.5em;
+    margin-left: -50%;
+}
+
+.textBetweenLines:after{
+    left: 0.5em;
+    margin-right: -50%;
+}

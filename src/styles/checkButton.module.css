@@ -1,0 +1,10 @@
+.checkBox{
+    max-width: 25px;
+    max-height: 25px;
+    min-width: 25px;
+    min-height: 25px;
+    border-radius: 999px;
+    border: none;
+    align-self: center;
+    cursor: pointer;
+}
