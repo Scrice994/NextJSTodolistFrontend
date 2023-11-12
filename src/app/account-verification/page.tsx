@@ -8,14 +8,17 @@ import { Spinner } from "@/components/bootstrap";
 import RedirectButton from "@/components/RedirectButton";
 
 interface PageProps{
-    params: { verificationCode: string }
+    searchParams: { 
+        userId: string
+        verificationCode: string 
+    }
 }
 
-export default async function Page({ params: { verificationCode }}: PageProps){
-    console.log(verificationCode);
+export default async function Page({ searchParams: { userId, verificationCode }}: PageProps){
+
     let user: User;
     try {
-        user = await verifyUser(verificationCode);
+        user = await verifyUser(userId, verificationCode);
         console.log(user);
     } catch (error) {
         if(error instanceof NotFoundError){

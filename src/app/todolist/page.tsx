@@ -11,7 +11,7 @@ import { HiMiniPlus } from "react-icons/hi2";
 import { FcDeleteDatabase } from "react-icons/fc";
 import DropDownDialog from "@/components/header/DropDownDialog";
 import Header from "@/components/header/Header";
-import style from "./page.module.css";
+import style from "./todolist.module.css";
 import SignUpModal from "@/components/modals/SignUpModal";
 import LogInModal from "@/components/modals/LogInModal";
 import { Spinner } from "react-bootstrap";

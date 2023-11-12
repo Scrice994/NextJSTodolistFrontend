@@ -37,8 +37,8 @@ export async function signUp(credentials: SignUpValues): Promise<User> {
     return response;
 }
 
-export async function verifyUser(verificationCode: string) {
-    const response = await httpClient.sendRequest(`/users/account-verification/${verificationCode}`, {
+export async function verifyUser(userId: string, verificationCode: string) {
+    const response = await httpClient.sendRequest(`/users/account-verification?userId=${userId}&verificationCode=${verificationCode}`, {
         method: 'get',
     });
     return response;
@@ -77,7 +77,8 @@ export async function login(credentials: LoginValues): Promise<User> {
     const response = await httpClient.sendRequest("/users/login", {
         method: 'post',
         body: credentials
-    })
+    });
+    console.log(response);
     return response;
 }
 
