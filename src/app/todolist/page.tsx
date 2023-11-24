@@ -15,6 +15,8 @@ import style from "./todolist.module.css";
 import SignUpModal from "@/components/modals/SignUpModal";
 import LogInModal from "@/components/modals/LogInModal";
 import { Spinner } from "react-bootstrap";
+import CreateMemberModal from "@/components/modals/CreateMemberModal";
+import DeleteAllTodosModal from "@/components/modals/DeleteAllTodosModal";
 
 
 export default function Todolist(){
@@ -23,6 +25,8 @@ export default function Todolist(){
     const [userModal, setUserModal] = useState(false);
     const [signUpModal, setSignUpModal] = useState(false);
     const [logInModal, setLogInModal] = useState(false);
+    const [createMemberModal, setCreateMemberModal] = useState(false);
+    const [deleteAllTodoModal, setDeleteAllTodoModal] = useState(false);
 
     const { user, userLoading, mutateUser } = useAuthenticatedUser();
 
@@ -105,7 +109,7 @@ export default function Todolist(){
                     </li>
                     <li
                         className={style.headerButton}
-                        onClick={() => deleteAllTodos()}
+                        onClick={() => setDeleteAllTodoModal(true)}
                     >
                         <div className={style.userIcon}>
                             <FcDeleteDatabase />
@@ -150,6 +154,7 @@ export default function Todolist(){
                     onDismiss={() => setUserModal(false)}
                     openSignUpModal={() => setSignUpModal(true)}
                     openLogInModal={() => setLogInModal(true)}
+                    openCreateMemberModal={() => setCreateMemberModal(true)}
                 />
             }
             { signUpModal &&
@@ -162,6 +167,18 @@ export default function Todolist(){
                 <LogInModal
                     openSignUpModal={() => setSignUpModal(true)}       
                     onDismiss={() => setLogInModal(false)} 
+                />
+            }
+            { createMemberModal &&
+                <CreateMemberModal 
+                    openCreateMemberModal={() => setCreateMemberModal(true)}
+                    onDismiss={() => setCreateMemberModal(false)}
+                />
+            }
+            { deleteAllTodoModal &&
+                <DeleteAllTodosModal
+                    onDeleteAllTodos={() => deleteAllTodos()}
+                    onDismiss={() => setDeleteAllTodoModal(false)}
                 />
             }
         </div>

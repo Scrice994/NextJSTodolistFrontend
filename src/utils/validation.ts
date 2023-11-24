@@ -11,3 +11,8 @@ export const emailSchema = yup.string().email("Please enter a valid email addres
 export const passwordSchema = yup.string()
     .matches(/^(?!.* )/, "Password must not contain any whitespaces")
     .min(6, "Password must be at least 6 characters long");
+
+export const tenantIdSchema = yup.string()
+    .min(1, "GroupName must be at least 1 characters long")
+    .max(30, "GroupName must be at least 30 characters or less")
+    .matches(/^[a-zA-Z0-9_]*$/, "GroupName accept only letters, numbers, and underscores are allowed")

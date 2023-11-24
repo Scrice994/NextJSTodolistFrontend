@@ -1,3 +1,4 @@
+import { User } from "@/models/user";
 import * as usersAPI from "@/network/api/users";
 import { UnauthorizedError } from "@/network/http-errors";
 import useSWR from "swr";
@@ -6,7 +7,7 @@ import useSWR from "swr";
 export default function useAuthenticatedUser(){
 
     const { data, isLoading, error, mutate } = useSWR("user", 
-        async () => {
+        async (): Promise<User | null> => {
             try {
                 return await usersAPI.getAuthenticatedUser();
             } catch (error) {

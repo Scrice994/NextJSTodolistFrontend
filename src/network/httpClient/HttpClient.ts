@@ -19,13 +19,11 @@ export class HttpClient implements IHttpClient<any>{
                 if(res.data){
                     res = res.data;
                 }
-
                 return res;
             }, 
             (error) => {
             if(axios.isAxiosError(error)){
                 const errorMessage = error.response?.data?.error;
-
                 switch (error.response?.status){
                     case 400: throw new BadRequestError(errorMessage);
                     case 401: throw new UnauthorizedError(errorMessage);
@@ -37,9 +35,7 @@ export class HttpClient implements IHttpClient<any>{
             throw error;
         })
 
-
         return (await axios('http://localhost:8080' + url, { ...this.requestToFetch(request), withCredentials: true }));
- 
     }
 
     private requestToFetch(request: Request){

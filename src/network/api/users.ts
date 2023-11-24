@@ -82,6 +82,14 @@ export async function login(credentials: LoginValues): Promise<User> {
     return response;
 }
 
+export async function createNewGroupMember(credentials: LoginValues): Promise<User>{
+    const response = await httpClient.sendRequest("/users/group/create-member-account", {
+        method: "post",
+        body: credentials
+    });
+    return response;
+}
+
 //da testare
 export async function logout(){
     await httpClient.sendRequest("/users/logout", { method: 'post' });

@@ -1,6 +1,6 @@
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { BadRequestError, ConflictError } from "@/network/http-errors";
-import { emailSchema, passwordSchema, usernameSchema } from "@/utils/validation";
+import { emailSchema, passwordSchema, tenantIdSchema, usernameSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,7 +16,7 @@ const validationSchema = yup.object({
     username: usernameSchema.required("Username is required"),
     email: emailSchema.required("Email is required"),
     password: passwordSchema.required("Password is required"),
-    // verificationCode: requiredStringSchema
+    tenantId: tenantIdSchema
 })
 
 type SignUpFormData = yup.InferType<typeof validationSchema>
@@ -37,6 +37,7 @@ const AddTodoDialog = ({ openLogInModal, onDismiss }: SignUpModalProps) => {
 
     async function onSubmit(credentials: SignUpFormData){
         try {
+            setFormSubmitted(false);
             setErrorText(null);
             await UserAPI.signUp(credentials);
             setFormSubmitted(true);
@@ -67,18 +68,24 @@ const AddTodoDialog = ({ openLogInModal, onDismiss }: SignUpModalProps) => {
                     type="text" 
                     register={register("username")}
                     error={errors.username}
-                    placeholder="Username..."
+                    placeholder="Username...*"
                 />
                 <CustomInputField
                     type="email"
                     register={register("email")}
                     error={errors.email}
-                    placeholder="Email..."
+                    placeholder="Email...*"
                 />
                 <PasswordInput 
                     register={register("password")}
                     error={errors.password}
-                    placeholder="Password..."
+                    placeholder="Password...*"
+                />
+                <CustomInputField 
+                    type="text"
+                    register={register("tenantId")}
+                    error={errors.tenantId}
+                    placeholder="Group name..."
                 />
                 <LoadingButton
                     type="submit"

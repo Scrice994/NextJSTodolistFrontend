@@ -4,10 +4,11 @@ interface DropDownDialogProps{
     logOutUser: () => void
     openSignUpModal: () => void
     openLogInModal: () => void
+    openCreateMemberModal: () => void
     onDismiss: () => void
 }
 
-export default function DropDownDialog({ logOutUser, openSignUpModal, openLogInModal, onDismiss }: DropDownDialogProps) {
+export default function DropDownDialog({ logOutUser, openSignUpModal, openLogInModal, openCreateMemberModal, onDismiss }: DropDownDialogProps) {
 
     const { user } = useAuthenticatedUser();
 
@@ -20,9 +21,21 @@ export default function DropDownDialog({ logOutUser, openSignUpModal, openLogInM
                     <div
                         className={style.username}
                     >
-                        { user?.username }
+                    <div>{ user?.username }</div>
+                    <div>{ user?.tenantId }</div> 
                     </div>
                     <hr style={{ marginTop: "0%" }}></hr>
+                    {user.userRole === "Admin" &&
+                        <button
+                            className={style.button}
+                            onClick={() => {
+                                openCreateMemberModal();
+                                onDismiss();
+                            }}
+                        >
+                            Create new member 
+                        </button>
+                    }
                     <button
                         className={style.button}
                         onClick={logOutUser}

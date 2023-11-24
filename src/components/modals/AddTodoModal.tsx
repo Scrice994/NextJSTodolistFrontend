@@ -21,7 +21,7 @@ interface AddTodoModalProps{
     onTodoCreated: (todo: Todo) => void
 }
 
-const AddTodoModal = ({onDismiss, onTodoCreated}: AddTodoModalProps) => {
+export default function AddTodoModal({onDismiss, onTodoCreated}: AddTodoModalProps){
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<CreateTodoPostValues>({
         resolver: yupResolver(validationSchema)
@@ -75,4 +75,3 @@ const AddTodoModal = ({onDismiss, onTodoCreated}: AddTodoModalProps) => {
     );
 }
  
-export default AddTodoModal;

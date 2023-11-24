@@ -13,6 +13,9 @@
 .username{
     font-weight: bold;
     font-size: larger;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .button{
@@ -22,4 +25,5 @@
     border-radius: var(--border-radius);
     color: aliceblue;
     font-weight: 700;
+    margin-top: 10px;
 }
