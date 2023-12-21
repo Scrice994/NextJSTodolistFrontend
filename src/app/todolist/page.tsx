@@ -17,6 +17,7 @@ import LogInModal from "@/components/modals/LogInModal";
 import { Spinner } from "react-bootstrap";
 import CreateMemberModal from "@/components/modals/CreateMemberModal";
 import DeleteAllTodosModal from "@/components/modals/DeleteAllTodosModal";
+import UpdateTodoDialog, { UpdateTodoValues } from "@/components/UpdateTodoDialog";
 
 
 export default function Todolist(){
@@ -77,6 +78,18 @@ export default function Todolist(){
         }
     }
 
+    async function updateTodo(todoId: string, todoToUpdate: UpdateTodoValues){
+        try {
+            await todoAPI.updateTodo({ id: todoId, text: todoToUpdate.text, description: todoToUpdate.description});
+            setTodos( prevTodos => prevTodos.map(existingTodo => 
+                existingTodo.id === todoId ? { ...existingTodo, text: todoToUpdate.text, description: todoToUpdate.description} : existingTodo
+            ));    
+        } catch (error) {
+            console.log(error);
+            alert(error);
+        }
+    }
+
     async function deleteAllTodos(){
         try {
             const todos = await todoAPI.deleteTodos();
@@ -127,12 +140,15 @@ export default function Todolist(){
                 { user ? 
                     <div className={style.todosContainer}>
                         {todos.map(todo => (
-                            <Todo 
-                                todo={todo}
-                                key={todo.id}
-                                onDeleteTodoClick={(todo) => deleteTodo(todo)}
-                                onCheckTodoClick={(todo) => checkTodo(todo)}
-                            />
+                            <>
+                                <Todo 
+                                    todo={todo}
+                                    key={todo.id}
+                                    onDeleteTodoClick={(todo) => deleteTodo(todo)}
+                                    onCheckTodoClick={(todo) => checkTodo(todo)}
+                                    onUpdateTodo={(todoId, todoToUpdate) => updateTodo(todoId, todoToUpdate)}
+                                />
+                            </>
                         ))}
                     </div>
                     :

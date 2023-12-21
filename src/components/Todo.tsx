@@ -3,15 +3,16 @@ import { useState } from "react";
 import { MdDelete } from 'react-icons/md';
 import style from "../styles/todo.module.css";
 import { CheckButton } from "./CheckButton";
-import UpdateTodoDialog from "./UpdateTodoDialog";
+import UpdateTodoDialog, { UpdateTodoValues } from "./UpdateTodoDialog";
 
 interface TodoProps {
     todo: TodoModel
     onDeleteTodoClick: (todo: TodoModel) => void
     onCheckTodoClick: (todo: TodoModel) => void
+    onUpdateTodo: (todoId: string, todoToUpdate: UpdateTodoValues) => void
 }
 
-const Todo = ({ todo, onDeleteTodoClick, onCheckTodoClick }: TodoProps) => {
+const Todo = ({ todo, onDeleteTodoClick, onCheckTodoClick, onUpdateTodo }: TodoProps) => {
     const [showUpdateTodoDialog, setShowUpdateTodoDialog] = useState(false);
     const { text } = todo;
 
@@ -44,6 +45,7 @@ const Todo = ({ todo, onDeleteTodoClick, onCheckTodoClick }: TodoProps) => {
                 <UpdateTodoDialog 
                     onDismiss={() => setShowUpdateTodoDialog(false)}
                     todo={todo}
+                    onUpdateTodo={(todoId, todoToUpdate) => onUpdateTodo(todoId, todoToUpdate)}
                 />
             }
         </>         

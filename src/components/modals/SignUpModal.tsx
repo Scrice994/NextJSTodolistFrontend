@@ -19,7 +19,7 @@ const validationSchema = yup.object({
     tenantId: tenantIdSchema
 })
 
-type SignUpFormData = yup.InferType<typeof validationSchema>
+type SignUpFormData = yup.InferType<typeof validationSchema>;
 
 interface SignUpModalProps{
     openLogInModal: () => void
