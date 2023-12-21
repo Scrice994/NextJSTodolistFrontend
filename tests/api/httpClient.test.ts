@@ -16,7 +16,8 @@ describe("unit", () => {
                 const response = await httpClient.sendRequest("/users/signup", { 
                     method: 'post',
                     body: { username: "testUsername", password: "testPassword", email: "testEmail@gmail.com" }
-                });
+                }).catch(err => console.log(err));
+                
                 console.log(response);
                 expect(response).toBeDefined();
                 expect(response).toEqual(expect.objectContaining({
