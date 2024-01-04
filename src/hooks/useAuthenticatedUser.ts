@@ -1,5 +1,5 @@
 import { User } from "@/models/user";
-import * as usersAPI from "@/network/api/users";
+import * as usersAPI from "@/network/services/UserService";
 import { UnauthorizedError } from "@/network/http-errors";
 import useSWR from "swr";
 
@@ -20,10 +20,17 @@ export default function useAuthenticatedUser(){
         }
     );
 
-    return{
+    async function logout(){
+        await usersAPI.logout();
+        mutate(null);
+        console.log("User logout");
+    }
+
+    return {
         user: data,
         userLoading: isLoading,
         userLoadingError: error,
-        mutateUser: mutate
+        mutateUser: mutate,
+        logout
     }
 }

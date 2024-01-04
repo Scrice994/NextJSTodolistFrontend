@@ -7,11 +7,11 @@ export interface Request {
     body?: any;
 }
 
-export interface IHttpClient<T> {
-    sendRequest(url: string, request: Request): Promise<T> 
+export interface IHttpClient {
+    sendRequest(url: string, request: Request): Promise<any> 
 }
 
-export class HttpClient implements IHttpClient<any>{
+export class HttpClient implements IHttpClient {
 
     async sendRequest(url: string, request: Request): Promise<any> {
         axios.interceptors.response.use(

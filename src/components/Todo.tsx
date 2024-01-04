@@ -1,39 +1,40 @@
+import { useTodosContext } from "@/context/TodosContext";
 import { Todo as TodoModel } from "@/models/todo";
 import { useState } from "react";
 import { MdDelete } from 'react-icons/md';
 import style from "../styles/todo.module.css";
 import { CheckButton } from "./CheckButton";
-import UpdateTodoDialog, { UpdateTodoValues } from "./UpdateTodoDialog";
+import UpdateTodoDialog from "./UpdateTodoDialog";
 
 interface TodoProps {
     todo: TodoModel
-    onDeleteTodoClick: (todo: TodoModel) => void
-    onCheckTodoClick: (todo: TodoModel) => void
-    onUpdateTodo: (todoId: string, todoToUpdate: UpdateTodoValues) => void
+    todoModalOff: () => void
+    todoModalOn: () => void
 }
 
-const Todo = ({ todo, onDeleteTodoClick, onCheckTodoClick, onUpdateTodo }: TodoProps) => {
-    const [showUpdateTodoDialog, setShowUpdateTodoDialog] = useState(false);
+const Todo = ({ todo, todoModalOff, todoModalOn }: TodoProps) => {
+    const [showUpdateTodoModal, setShowUpdateTodoModal] = useState(false);
+    const { checkTodo, deleteTodo, updateTodo } = useTodosContext();
     const { text } = todo;
 
     return(
         <>
             <div 
                 className={style.todo}
-                onClick={() => setShowUpdateTodoDialog(true)}
+                onClick={() => {setShowUpdateTodoModal(true); todoModalOn();}}
             >
                 <div className={style.todoFlex}>
                     <div className={style.todoBody}>
                         <CheckButton 
                             todo={todo}
-                            onCheckTodoClick={() => onCheckTodoClick(todo)}
+                            onCheckTodoClick={() => checkTodo(todo)}
                         />
                         <h4 className={style.todoText}>{text}</h4>
                     </div>
                     <div>
                         <MdDelete
                             onClick={(e: Event) => {
-                                onDeleteTodoClick(todo);
+                                deleteTodo(todo);
                                 e.stopPropagation();
                             }}
                             className={style.trash}
@@ -41,11 +42,11 @@ const Todo = ({ todo, onDeleteTodoClick, onCheckTodoClick, onUpdateTodo }: TodoP
                     </div>
                 </div>
             </div>
-            {showUpdateTodoDialog &&
+            {showUpdateTodoModal &&
                 <UpdateTodoDialog 
-                    onDismiss={() => setShowUpdateTodoDialog(false)}
+                    onDismiss={() => {setShowUpdateTodoModal(false); todoModalOff();}}
                     todo={todo}
-                    onUpdateTodo={(todoId, todoToUpdate) => onUpdateTodo(todoId, todoToUpdate)}
+                    onUpdateTodo={(todoId, todoToUpdate) => updateTodo(todoId, todoToUpdate)}
                 />
             }
         </>         

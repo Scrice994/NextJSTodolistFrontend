@@ -1,4 +1,4 @@
-import * as UserAPI from "@/network/api/users";
+import * as UserAPI from "@/network/services/UserService";
 import { BadRequestError, ConflictError, HttpError, TooManyRequestError, UnauthorizedError, isCustomError } from "@/network/http-errors";
 import { requiredStringSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";

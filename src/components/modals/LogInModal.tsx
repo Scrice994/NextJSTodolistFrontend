@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import * as UserAPI from "../../network/api/users";
+import * as UserAPI from "../../network/services/UserService";
 import LoadingButton from "../LoadingButton";
 import ModalContainer from "./ModalContainer";
 import CustomInputField from "../utils/CustomInputField";

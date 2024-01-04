@@ -1,15 +1,15 @@
-import { Todo } from "@/models/todo";
-import { CreateTodoPostValues, createTodo } from "@/network/api/todo";
+import { useTodosContext } from "@/context/TodosContext";
+import { CreateTodoPostValues } from "@/network/services/TodoService";
 import { requiredStringSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { GrClose } from 'react-icons/gr';
 import * as yup from "yup";
 import LoadingButton from "../LoadingButton";
-import style from "./modals.module.css";
-import ModalContainer from "./ModalContainer";
 import CustomInputField from "../utils/CustomInputField";
 import CustomTextAreaField from "../utils/CustomTextAreaField";
+import ModalContainer from "./ModalContainer";
+import style from "./modals.module.css";
 
 const validationSchema = yup.object({
     text: requiredStringSchema,
@@ -18,19 +18,19 @@ const validationSchema = yup.object({
 
 interface AddTodoModalProps{
     onDismiss: () => void
-    onTodoCreated: (todo: Todo) => void
 }
 
-export default function AddTodoModal({onDismiss, onTodoCreated}: AddTodoModalProps){
+export default function AddTodoModal({ onDismiss }: AddTodoModalProps){
 
+    const { addTodo } = useTodosContext();
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<CreateTodoPostValues>({
         resolver: yupResolver(validationSchema)
     });
 
     async function onSubmit(input: CreateTodoPostValues){
         try {
-            const response = await createTodo(input);
-            onTodoCreated(response);
+            await addTodo(input);
+            onDismiss();
         } catch (error) {
             console.log(error);
             alert(error);

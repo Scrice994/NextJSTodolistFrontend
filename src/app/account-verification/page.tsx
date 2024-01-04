@@ -1,4 +1,4 @@
-import { verifyUser } from "@/network/api/users";
+import { verifyUser } from "@/network/services/UserService";
 import { NotFoundError } from "@/network/http-errors";
 import { notFound } from "next/navigation";
 import { BsCheckCircleFill } from "react-icons/bs"
