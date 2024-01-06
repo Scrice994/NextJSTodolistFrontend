@@ -1,6 +1,6 @@
 import { Todo as TodoModel } from "@/models/todo";
-import { IHttpClient } from "../httpClient/HttpClient";
-import { CreateTodoPostValues, ITodoService, newTodoValues } from "./interfaces/ITodoService";
+import { IHttpClient } from "../interfaces/IHttpClient";
+import { CreateTodoPostValues, ITodoService, newTodoValues } from "../interfaces/ITodoService";
 
 export class TodoService implements ITodoService{
     constructor(private httpClient: IHttpClient){}

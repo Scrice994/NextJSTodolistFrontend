@@ -1,5 +1,5 @@
-import { IHttpClient, Request } from "../../src/network/httpClient/HttpClient";
+import { IHttpClient } from "../../src/common/interfaces/IHttpClient";
 
-export class HttpClientMock implements IHttpClient<any>{
+export class HttpClientMock implements IHttpClient{
     sendRequest=jest.fn()
 }

@@ -1,15 +1,6 @@
 import axios from "axios";
-import { BadRequestError, ConflictError, NotFoundError, TooManyRequestError, UnauthorizedError } from "../http-errors";
-
-export interface Request {
-    method: string;
-    headers?: any;
-    body?: any;
-}
-
-export interface IHttpClient {
-    sendRequest(url: string, request: Request): Promise<any> 
-}
+import { BadRequestError, ConflictError, NotFoundError, TooManyRequestError, UnauthorizedError } from "./http-errors";
+import { Request, IHttpClient } from "../interfaces/IHttpClient";
 
 export class HttpClient implements IHttpClient {
 

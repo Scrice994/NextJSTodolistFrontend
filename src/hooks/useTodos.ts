@@ -1,22 +1,21 @@
 import { UpdateTodoValues } from "@/components/UpdateTodoDialog";
 import { Todo as TodoModel } from "@/models/todo";
-import { TodoService } from "@/network/services/TodoService";
+import { TodoService } from "../common/services/TodoService";
 import { useEffect, useState } from "react";
 import useAuthenticatedUser from "./useAuthenticatedUser";
-import { IHttpClient } from "@/network/httpClient/HttpClient";
-import { CreateTodoPostValues } from "@/network/services/interfaces/ITodoService";
+import { IHttpClient } from "@/common/interfaces/IHttpClient";
+import { CreateTodoPostValues } from "@/common/interfaces/ITodoService";
 
 export default function useTodos(httpClient: IHttpClient){
     const [todos, setTodos] = useState<TodoModel[]>([]);
 
-    const { user, mutateUser } = useAuthenticatedUser();
-
+    const { user, mutateUser } = useAuthenticatedUser(httpClient);
     const todoService = new TodoService(httpClient);
 
     useEffect(() => {
         async function getTodos(){
-            const response = await todoService.getTodos();
-            setTodos(response);
+            const res = await todoService.getTodos();
+            setTodos(res);
         }
         getTodos();
     }, [user]);

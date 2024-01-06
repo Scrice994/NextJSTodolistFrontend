@@ -3,7 +3,7 @@ export interface Todo {
     text: string;
     description?: string;
     completed: boolean;
-    userId?: string;
+    userId: string;
     tenantId?: string;
     createdAt: string;
     updatedAt: string;

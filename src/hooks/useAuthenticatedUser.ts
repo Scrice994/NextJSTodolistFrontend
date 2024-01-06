@@ -1,15 +1,18 @@
 import { User } from "@/models/user";
-import * as usersAPI from "@/network/services/UserService";
-import { UnauthorizedError } from "@/network/http-errors";
+import { UserService } from "../common/services/UserService";
+import { UnauthorizedError } from "../common/services/http-errors";
 import useSWR from "swr";
+import { IHttpClient } from "@/common/interfaces/IHttpClient";
 
 /** da testare */
-export default function useAuthenticatedUser(){
+export default function useAuthenticatedUser(httpClient: IHttpClient){
+
+    const userService = new UserService(httpClient);
 
     const { data, isLoading, error, mutate } = useSWR("user", 
         async (): Promise<User | null> => {
             try {
-                return await usersAPI.getAuthenticatedUser();
+                return await userService.getAuthenticatedUser();
             } catch (error) {
                 if(error instanceof UnauthorizedError){
                     return null;
@@ -21,7 +24,7 @@ export default function useAuthenticatedUser(){
     );
 
     async function logout(){
-        await usersAPI.logout();
+        await userService.logout();
         mutate(null);
         console.log("User logout");
     }
