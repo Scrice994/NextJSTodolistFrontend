@@ -2,14 +2,14 @@
 import { UpdateTodoValues } from "@/components/UpdateTodoDialog";
 import useTodos from "@/hooks/useTodos";
 import { Todo as TodoModel } from "@/models/todo";
-import { CreateTodoPostValues } from "@/network/services/interfaces/ITodoService";
+import { CreateTodoPostValues } from "@/common/interfaces/ITodoService";
 import { createContext, useContext } from "react";
-import { HttpClient } from "@/network/httpClient/HttpClient";
+import { HttpClient } from "@/common/services/HttpClient";
 
 interface ITodosContext{
     todos: TodoModel[]
     whenUserLogout: () => void
-    deleteTodo: (todo: TodoModel) => void
+    deleteTodo: (todoId: string) => void
     checkTodo: (todo: TodoModel) => void
     updateTodo: (todoId: string, todoToUpdate: UpdateTodoValues) => void
     deleteAllTodos: () => void

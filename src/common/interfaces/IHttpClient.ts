@@ -5,5 +5,5 @@ export interface Request {
 }
 
 export interface IHttpClient {
-    sendRequest(url: string, request: Request): Promise<any> 
+    sendRequest(url?: string, request?: Request): Promise<any> 
 }

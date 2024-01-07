@@ -9,13 +9,17 @@ import { CreateTodoPostValues } from "@/common/interfaces/ITodoService";
 export default function useTodos(httpClient: IHttpClient){
     const [todos, setTodos] = useState<TodoModel[]>([]);
 
-    const { user, mutateUser } = useAuthenticatedUser(httpClient);
+    const { user } = useAuthenticatedUser(httpClient);
     const todoService = new TodoService(httpClient);
 
     useEffect(() => {
         async function getTodos(){
-            const res = await todoService.getTodos();
-            setTodos(res);
+            try{
+                const res = await todoService.getTodos();
+                setTodos([...res]);
+            } catch(error){
+                console.log(error);
+            }
         }
         getTodos();
     }, [user]);
@@ -30,33 +34,31 @@ export default function useTodos(httpClient: IHttpClient){
             setTodos(prevTodos => [...prevTodos, newTodo]);
         } catch (error) {
             console.log(error);
-            alert(error);
         }
     }
 
-    async function deleteTodo(todo: TodoModel){
+    async function deleteTodo(todoId: string){
         try {
-            await todoService.deleteTodo(todo.id);
-            setTodos(prevTodos => prevTodos.filter(existingTodo => existingTodo.id !== todo.id));
+            await todoService.deleteTodo(todoId);
+            setTodos(prevTodos => prevTodos.filter(existingTodo => existingTodo.id !== todoId));
         } catch (error) {
             console.log(error);
-            alert(error);
         }
     }
 
     async function checkTodo(todo: TodoModel){
         try {
-            await todoService.updateTodo({ id: todo.id, completed: !todo.completed });
+            const { id, completed } = todo;
+            await todoService.updateTodo({ id, completed: !completed });
             setTodos(prevTodos => prevTodos.map(existingTodo => 
-                existingTodo.id === todo.id ? { ...existingTodo, completed: !existingTodo.completed } : existingTodo
+                existingTodo.id === id ? { ...existingTodo, completed: !existingTodo.completed } : existingTodo
             ));
         } catch (error) {
             console.log(error);
-            alert(error);
         }
     }
 
-    async function updateTodo(todoId: string, todoToUpdate: UpdateTodoValues){
+    async function changeTodo(todoId: string, todoToUpdate: UpdateTodoValues){
         try {
             await todoService.updateTodo({ id: todoId, text: todoToUpdate.text, description: todoToUpdate.description});
             setTodos( prevTodos => prevTodos.map(existingTodo => 
@@ -64,18 +66,15 @@ export default function useTodos(httpClient: IHttpClient){
             ));    
         } catch (error) {
             console.log(error);
-            alert(error);
         }
     }
 
     async function deleteAllTodos(){
         try {
-            const todos = await todoService.deleteTodos();
-            console.log(todos);
+            await todoService.deleteTodos();
             setTodos([]);
         } catch (error) {
             console.log(error);
-            alert(error);
         }
     }
 
@@ -83,7 +82,7 @@ export default function useTodos(httpClient: IHttpClient){
         todos,
         whenUserLogout,
         addTodo,
-        updateTodo,
+        changeTodo,
         checkTodo,
         deleteTodo,
         deleteAllTodos

@@ -34,7 +34,7 @@ const Todo = ({ todo, todoModalOff, todoModalOn }: TodoProps) => {
                     <div>
                         <MdDelete
                             onClick={(e: Event) => {
-                                deleteTodo(todo);
+                                deleteTodo(todo.id);
                                 e.stopPropagation();
                             }}
                             className={style.trash}
