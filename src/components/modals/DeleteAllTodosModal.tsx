@@ -1,18 +1,16 @@
-import { useTodolistContext } from "@/context/TodosContext";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import ModalContainer from "./ModalContainer";
-import style from "./modals.module.css";
+import style from "../../styles/modals.module.css";
 
 interface DeleteAllTodosModalProps{
     onDismiss: () => void
 }
 
 export default function DeleteAllTodosModal({ onDismiss }: DeleteAllTodosModalProps) {
-    const { deleteAllTodos } = useTodolistContext();
-
     return (
         <ModalContainer
             modalStyle={style.modalWithAnimation}
+            overlayStyle={style.darkOverlay}
             onDismiss={onDismiss}
         >   
             <div className={style.verticalHeader}>
@@ -23,7 +21,6 @@ export default function DeleteAllTodosModal({ onDismiss }: DeleteAllTodosModalPr
                 <button
                     className={style.deleteAllTodoYesButton}
                     onClick={() => {
-                        deleteAllTodos();
                         onDismiss();
                     }}
                 >

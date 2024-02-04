@@ -1,34 +1,29 @@
-import { Todo as TodoModel } from "../models/todo"
+import { useUpdateTodoMutation } from "@/lib/features/api/todoSlice";
 import { AnimatePresence, motion } from "framer-motion";
-import stylesCheckButton from "../styles/checkButton.module.css";
+import { Todo as TodoModel } from "../../models/todo";
+import style from "../../styles/todoList.module.css";
 
 interface CheckButtonProps {
   todo: TodoModel;
-  onCheckTodoClick: (todo: TodoModel) => void;
 }
 
-const animationCircle = {
-  initial: { r: 0 },
-  mid: { r: 47, transition: { duration: 0.15 } },
-  exit: { r: 0, transition: { duration: 0.25, delay: 0.1 } },
-};
+export const CheckButton = ({ todo }: CheckButtonProps) => {
+  const [updateTodo] = useUpdateTodoMutation();
 
-const animationCheck = {
-  initial: { pathLength: 0, opacity: 0 },
-  mid: {
-    pathLength: 1,
-    opacity: 1,
-    transition: { duration: 0.15, delay: 0.16 },
-  },
-  exit: { pathLength: 0, opacity: 0, transition: { duration: 0.15 } },
-};
+  async function checkTodo(){
+    await updateTodo({
+      id: todo.id,
+      toUpdate: {
+        completed: !todo.completed
+      }
+    }).unwrap();
+  }
 
-export const CheckButton = ({ todo, onCheckTodoClick }: CheckButtonProps) => {
   return (
     <button
-      className={stylesCheckButton.checkBox}
+      className={style.checkBox}
       onClick={(e) => {
-        onCheckTodoClick(todo);
+        checkTodo();
         e.stopPropagation();
       }}
     >
@@ -73,4 +68,21 @@ export const CheckButton = ({ todo, onCheckTodoClick }: CheckButtonProps) => {
       </svg>
     </button>
   );
+};
+
+
+const animationCircle = {
+  initial: { r: 0 },
+  mid: { r: 47, transition: { duration: 0.15 } },
+  exit: { r: 0, transition: { duration: 0.25, delay: 0.1 } },
+};
+
+const animationCheck = {
+  initial: { pathLength: 0, opacity: 0 },
+  mid: {
+    pathLength: 1,
+    opacity: 1,
+    transition: { duration: 0.15, delay: 0.16 },
+  },
+  exit: { pathLength: 0, opacity: 0, transition: { duration: 0.15 } },
 };

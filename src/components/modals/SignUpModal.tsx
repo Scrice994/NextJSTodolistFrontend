@@ -1,15 +1,16 @@
-import { BadRequestError, ConflictError } from "@/network/http-errors";
+import { BadRequestError, ConflictError } from "@/common/services/http-errors";
 import { emailSchema, passwordSchema, tenantIdSchema, usernameSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import * as UserAPI from "../../network/services/UserService";
-import LoadingButton from "../LoadingButton";
+import { UserService } from "../../common/services/UserService";
+import LoadingButton from "../utils/LoadingButton";
 import CustomInputField from "../utils/CustomInputField";
 import PasswordInput from "../utils/PasswordInput";
 import ModalContainer from "./ModalContainer";
-import style from "./modals.module.css";
+import style from "../../styles/modals.module.css";
+import { HttpClient } from "@/common/services/HttpClient";
 
 const validationSchema = yup.object({
     username: usernameSchema.required("Username is required"),
@@ -30,6 +31,8 @@ const AddTodoDialog = ({ openLogInModal, onDismiss }: SignUpModalProps) => {
     const [errorText, setErrorText] = useState<string|null>(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
     
+    const httpClient = new HttpClient();
+    const userService = new UserService(httpClient);
     const { register, handleSubmit, getValues, trigger, formState: { errors, isSubmitting } } = useForm<SignUpFormData>({
         resolver: yupResolver(validationSchema)
     });
@@ -38,7 +41,7 @@ const AddTodoDialog = ({ openLogInModal, onDismiss }: SignUpModalProps) => {
         try {
             setFormSubmitted(false);
             setErrorText(null);
-            await UserAPI.signUp(credentials);
+            await userService.signUp(credentials);
             setFormSubmitted(true);
         } catch (error) {
             if(error instanceof BadRequestError || error instanceof ConflictError){
@@ -53,6 +56,7 @@ const AddTodoDialog = ({ openLogInModal, onDismiss }: SignUpModalProps) => {
     return (
         <ModalContainer
             modalStyle={style.modalWithAnimation}
+            overlayStyle={style.darkOverlay}
             onDismiss={onDismiss}
         >   
             <header>

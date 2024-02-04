@@ -1,6 +1,8 @@
 "use client"
 import AddTodoModal from "@/components/modals/AddTodoModal";
 import DeleteAllTodosModal from "@/components/modals/DeleteAllTodosModal";
+import UpdateTodoDialog from "@/components/modals/UpdateTodoModal";
+import { Todo } from "@/models/todo";
 import { createContext, useContext, useState } from "react";
 
 interface ITodolistModalsContext{
@@ -8,6 +10,8 @@ interface ITodolistModalsContext{
     showAddTodoModal: () => void
     deleteAllTodoModal: boolean
     showDeleteAllTodoModal: () => void
+    showUpdateTodoModal: () => void
+    setTodoToUpdate: (todo: Todo) => void
 }
 
 export const TodolistModalsContext = createContext<ITodolistModalsContext | null>(null);
@@ -20,12 +24,16 @@ export default function TodolistModalsProvider({ children }: TodolistModalsProvi
 
     const [addTodoModal, setAddTodoModal] = useState(false);
     const [deleteAllTodoModal, setDeleteAllTodoModal] = useState(false);
+    const [updateTodoModal, setUpdateTodoModal] = useState(false);
+    const [todoToUpdate, setTodoToUpdate] = useState<Todo | null>(null);
 
     const value = {
         addTodoModal,
         showAddTodoModal: () => setAddTodoModal(true),
         deleteAllTodoModal,
-        showDeleteAllTodoModal: () => setDeleteAllTodoModal(true)
+        showDeleteAllTodoModal: () => setDeleteAllTodoModal(true),
+        showUpdateTodoModal: () => setUpdateTodoModal(true),
+        setTodoToUpdate: (todo: Todo) => setTodoToUpdate(todo)
     }
     
     return(
@@ -41,6 +49,12 @@ export default function TodolistModalsProvider({ children }: TodolistModalsProvi
                     onDismiss={() => setDeleteAllTodoModal(false)}
                 />
             }
+            { updateTodoModal &&
+                <UpdateTodoDialog 
+                    onDismiss={() => setUpdateTodoModal(false)}
+                    todo={todoToUpdate}
+                />
+            } 
         </TodolistModalsContext.Provider>
     );
 }

@@ -4,6 +4,7 @@ export interface CreateTodoPostValues{
     text: string;
     description?: string;
 };
+
 export interface newTodoValues{
     id: string;
     text?: string;

@@ -5,11 +5,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import LoadingButton from "../LoadingButton";
+import LoadingButton from "../utils/LoadingButton";
 import CustomInputField from "../utils/CustomInputField";
 import PasswordInput from "../utils/PasswordInput";
 import ModalContainer from "./ModalContainer";
-import style from "./modals.module.css";
+import style from "../../styles/modals.module.css";
 
 const validationSchema = yup.object({
     username: requiredStringSchema,
@@ -51,6 +51,7 @@ export default function CreateMemberModal({ openCreateMemberModal, onDismiss }: 
     return (
         <ModalContainer
             modalStyle={style.modalWithAnimation}
+            overlayStyle={style.darkOverlay}
             onDismiss={onDismiss}
         >
             <header>

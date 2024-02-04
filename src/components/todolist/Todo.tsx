@@ -1,33 +1,32 @@
-import { useTodosContext } from "@/context/TodosContext";
+import { useDeleteTodoMutation } from "@/lib/features/api/todoSlice";
 import { Todo as TodoModel } from "@/models/todo";
-import { useState } from "react";
 import { MdDelete } from 'react-icons/md';
-import style from "../styles/todo.module.css";
+import style from "../../styles/todoList.module.css";
 import { CheckButton } from "./CheckButton";
-import UpdateTodoDialog from "./UpdateTodoDialog";
+import { useTodolistModalsContext } from "@/context/TodolistModalsProvider";
 
 interface TodoProps {
     todo: TodoModel
-    todoModalOff: () => void
-    todoModalOn: () => void
 }
 
-const Todo = ({ todo, todoModalOff, todoModalOn }: TodoProps) => {
-    const [showUpdateTodoModal, setShowUpdateTodoModal] = useState(false);
-    const { checkTodo, deleteTodo, updateTodo } = useTodosContext();
+const Todo = ({ todo }: TodoProps) => {
+    const { setTodoToUpdate, showUpdateTodoModal} = useTodolistModalsContext()
+    const [deleteTodo] = useDeleteTodoMutation();
     const { text } = todo;
 
     return(
         <>
             <div 
                 className={style.todo}
-                onClick={() => {setShowUpdateTodoModal(true); todoModalOn();}}
+                onClick={() => {
+                    showUpdateTodoModal();
+                    setTodoToUpdate(todo);
+                }}
             >
                 <div className={style.todoFlex}>
                     <div className={style.todoBody}>
                         <CheckButton 
                             todo={todo}
-                            onCheckTodoClick={() => checkTodo(todo)}
                         />
                         <h4 className={style.todoText}>{text}</h4>
                     </div>
@@ -42,13 +41,6 @@ const Todo = ({ todo, todoModalOff, todoModalOn }: TodoProps) => {
                     </div>
                 </div>
             </div>
-            {showUpdateTodoModal &&
-                <UpdateTodoDialog 
-                    onDismiss={() => {setShowUpdateTodoModal(false); todoModalOff();}}
-                    todo={todo}
-                    onUpdateTodo={(todoId, todoToUpdate) => updateTodo(todoId, todoToUpdate)}
-                />
-            }
         </>         
     )
 }

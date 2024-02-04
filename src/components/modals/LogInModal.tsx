@@ -1,17 +1,16 @@
-import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
-import { TooManyRequestError, UnauthorizedError } from "@/network/http-errors";
+import { TooManyRequestError, UnauthorizedError } from "@/common/services/http-errors";
 import { requiredStringSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import * as UserAPI from "../../network/services/UserService";
-import LoadingButton from "../LoadingButton";
-import ModalContainer from "./ModalContainer";
+import LoadingButton from "../utils/LoadingButton";
+import GoogleSignInButton from "../auth/GoogleSignInButton";
 import CustomInputField from "../utils/CustomInputField";
 import PasswordInput from "../utils/PasswordInput";
-import style from "./modals.module.css";
-import GoogleSignInButton from "../auth/GoogleSignInButton";
+import ModalContainer from "./ModalContainer";
+import style from "../../styles/modals.module.css";
+import { useLoginMutation } from "@/lib/features/api/userSlice";
 
 const validationSchema = yup.object({
     username: requiredStringSchema,
@@ -30,17 +29,16 @@ export default function LogInModal({ openSignUpModal, onDismiss }: LogInModalPro
     const [showPassword, setShowPassword] = useState(false);
     const [errorText, setErrorText] = useState<string|null>(null);
 
-    const { mutateUser } = useAuthenticatedUser();
-
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
         resolver: yupResolver(validationSchema),
     });
 
+    const [login] = useLoginMutation();
+
     const onSubmit = async (credentials: LoginFormData) => {
         try {
             setErrorText(null);
-            const logUser = await UserAPI.login(credentials);
-            mutateUser(logUser);
+            await login(credentials).unwrap();
             onDismiss();   
         } catch (error) {
             if (error instanceof UnauthorizedError){
@@ -57,6 +55,7 @@ export default function LogInModal({ openSignUpModal, onDismiss }: LogInModalPro
     return (
         <ModalContainer
             modalStyle={style.modalWithAnimation}
+            overlayStyle={style.darkOverlay}
             onDismiss={onDismiss}
         >
             <header>
@@ -95,7 +94,6 @@ export default function LogInModal({ openSignUpModal, onDismiss }: LogInModalPro
                         Sign up
                     </a>
                 </div>
-                <div>Forgot password?</div>
         </ModalContainer>
     )
 }

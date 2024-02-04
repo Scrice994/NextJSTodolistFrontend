@@ -1,4 +1,5 @@
 "use client"
+import DropDownDialog from "@/components/modals/UserModal";
 import LogInModal from "@/components/modals/LogInModal";
 import SignUpModal from "@/components/modals/SignUpModal";
 import { createContext, useContext, useState } from "react";
@@ -8,6 +9,8 @@ interface IAuthModalsContext{
     showSignUpModal: () => void
     logInModal: boolean
     showLogInModal: () => void
+    userModal: boolean
+    toggleUserModal: () => void
 }
 
 export const AuthModalsContext = createContext<IAuthModalsContext | null>(null);
@@ -17,15 +20,18 @@ interface AuthModalsProviderProps{
 }
 
 export default function AuthModalsProvider({ children }: AuthModalsProviderProps) {
-    
+    const [userModal, setUserModal] = useState(false);
     const [signUpModal, setSignUpModal] = useState(false);
     const [logInModal, setLogInModal] = useState(false);
+    const [createMemberModal, setCreateMemberModal] = useState(false);
 
     const value = {
         signUpModal,
         showSignUpModal: () => setSignUpModal(true),
         logInModal,
-        showLogInModal: () => setLogInModal(true)
+        showLogInModal: () => setLogInModal(true),
+        userModal,
+        toggleUserModal: () => setUserModal(!userModal)
     }
     
     return(
@@ -41,6 +47,13 @@ export default function AuthModalsProvider({ children }: AuthModalsProviderProps
                 <LogInModal
                     openSignUpModal={() => setSignUpModal(true)}       
                     onDismiss={() => setLogInModal(false)} 
+                />
+            }
+            { userModal && 
+                <DropDownDialog
+                    openLogInModal={() => setLogInModal(true)}
+                    openSignUpModal={() => setSignUpModal(true)} 
+                    onDismiss={() => setUserModal(false)}
                 />
             }
         </AuthModalsContext.Provider>

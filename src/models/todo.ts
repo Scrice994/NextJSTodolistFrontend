@@ -5,6 +5,6 @@ export interface Todo {
     completed: boolean;
     userId: string;
     tenantId?: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 }

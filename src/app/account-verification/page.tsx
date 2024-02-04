@@ -5,7 +5,7 @@ import { BsCheckCircleFill } from "react-icons/bs"
 import style from "./page.module.css";
 import { User } from "@/models/user";
 import { Spinner } from "@/components/bootstrap";
-import RedirectButton from "@/components/RedirectButton";
+import RedirectButton from "@/components/utils/RedirectButton";
 
 interface PageProps{
     searchParams: { 

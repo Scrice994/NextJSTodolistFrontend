@@ -1,6 +1,6 @@
 import React, { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
-import style from "./input.module.css";
+import style from "../../styles/input.module.css";
 
 interface CustomTextAreaFieldProps{
     register: UseFormRegisterReturn

@@ -1,15 +1,16 @@
-import { useTodosContext } from "@/context/TodosContext";
-import { CreateTodoPostValues } from "@/network/services/TodoService";
+"use client"
+import { CreateTodoPostValues } from "@/common/interfaces/ITodoService";
+import { useAddNewTodoMutation } from "@/lib/features/api/todoSlice";
 import { requiredStringSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { GrClose } from 'react-icons/gr';
 import * as yup from "yup";
-import LoadingButton from "../LoadingButton";
+import LoadingButton from "../utils/LoadingButton";
 import CustomInputField from "../utils/CustomInputField";
 import CustomTextAreaField from "../utils/CustomTextAreaField";
 import ModalContainer from "./ModalContainer";
-import style from "./modals.module.css";
+import style from "../../styles/modals.module.css";
 
 const validationSchema = yup.object({
     text: requiredStringSchema,
@@ -21,15 +22,15 @@ interface AddTodoModalProps{
 }
 
 export default function AddTodoModal({ onDismiss }: AddTodoModalProps){
+    const [addNewTodo] = useAddNewTodoMutation();
 
-    const { addTodo } = useTodosContext();
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<CreateTodoPostValues>({
         resolver: yupResolver(validationSchema)
     });
 
-    async function onSubmit(input: CreateTodoPostValues){
+    async function onSubmit(input: any){
         try {
-            await addTodo(input);
+            await addNewTodo(input).unwrap();
             onDismiss();
         } catch (error) {
             console.log(error);
@@ -40,6 +41,7 @@ export default function AddTodoModal({ onDismiss }: AddTodoModalProps){
     return (
         <ModalContainer
             modalStyle={style.modal}
+            overlayStyle={style.darkOverlay}
             onDismiss={onDismiss}
         >
             <div className={style.header}>
@@ -74,4 +76,3 @@ export default function AddTodoModal({ onDismiss }: AddTodoModalProps){
         </ModalContainer>
     );
 }
- 

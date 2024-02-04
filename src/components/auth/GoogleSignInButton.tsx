@@ -1,6 +1,6 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
-import style from "./googleSignInbutton.module.css";
+import style from "../../styles/googleSignInbutton.module.css";
 
 export default function GoogleSignInButton() {
 

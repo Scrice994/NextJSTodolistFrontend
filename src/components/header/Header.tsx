@@ -1,16 +1,29 @@
-import React, { ReactNode } from 'react'
-import style from "./header.module.css";
+"use client"
+import { useGetUserQuery } from '@/lib/features/api/userSlice';
+import { FaUser } from 'react-icons/fa';
+import style from "../../styles/header.module.css";
+import { useAuthModalsContext } from '@/context/AuthModalsProvider';
+import CustomIcon from '../utils/CustomIcon';
 
-export default function Header ({ children }: {children: ReactNode}){
+export default function Header (){
+    const { data: user } = useGetUserQuery({});
+    const { toggleUserModal } = useAuthModalsContext();
+
     return (
         <header 
             className={style.header}
         >
-            <ul
+            <div
                 className={style.headerNav}
             >
-                { children }
-            </ul>
+                <h1 className={style.headerTitle}>My Personal Project</h1>
+                <CustomIcon 
+                    icon={<FaUser/>}
+                    iconFunction={toggleUserModal}
+                    iconContainerStyle={user ? style.headerButtonOnline : style.headerButton}
+                    iconStyle={style.userIcon}
+                />
+            </div>
         </header>
     )
 }

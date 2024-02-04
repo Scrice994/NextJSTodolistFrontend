@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, useState } from 'react';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import style from "./input.module.css";
+import style from "../../styles/input.module.css";
 
 interface PasswordInputProps{
     register: UseFormRegisterReturn
