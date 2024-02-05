@@ -2,15 +2,13 @@
 import List from "@/components/todolist/List";
 import { useAuthModalsContext } from "@/context/AuthModalsProvider";
 import { useTodolistModalsContext } from "@/context/TodolistModalsProvider";
-import { useGetUserQuery } from "@/lib/features/api/userSlice";
-import { useState } from "react";
+import useShowAddTodoModal from "@/hooks/useShowAddTodoModal";
 
 export default function TodolistApp() {
-  const { data: user } = useGetUserQuery({})     
-  const [todoModal, setTodoModal] = useState(false)    
-  const { logInModal, signUpModal, showLogInModal, showSignUpModal } = useAuthModalsContext();
-  const { addTodoModal, showAddTodoModal, deleteAllTodoModal, showDeleteAllTodoModal } = useTodolistModalsContext();
-  //const onKeyEnter = useShowAddTodoModal(showAddTodoModal, addTodoModal, signUpModal, logInModal, userModal, deleteAllTodoModal, todoModal, createMemberModal)     
+  const { logInModal, signUpModal, userModal, createMemberModal } = useAuthModalsContext();
+  const { addTodoModal, showAddTodoModal, deleteAllTodoModal, updateTodoModal  } = useTodolistModalsContext();
+  const onKeyEnter = useShowAddTodoModal(showAddTodoModal, addTodoModal, signUpModal, logInModal, userModal, deleteAllTodoModal, updateTodoModal, createMemberModal);
+
   return (
     <div>
       <List />

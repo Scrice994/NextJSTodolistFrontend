@@ -1,9 +1,9 @@
+import { useTodolistModalsContext } from "@/context/TodolistModalsProvider";
 import { useDeleteTodoMutation } from "@/lib/features/api/todoSlice";
 import { Todo as TodoModel } from "@/models/todo";
-import { MdDelete } from 'react-icons/md';
+import { GrClose } from 'react-icons/gr';
 import style from "../../styles/todoList.module.css";
 import { CheckButton } from "./CheckButton";
-import { useTodolistModalsContext } from "@/context/TodolistModalsProvider";
 
 interface TodoProps {
     todo: TodoModel
@@ -28,10 +28,12 @@ const Todo = ({ todo }: TodoProps) => {
                         <CheckButton 
                             todo={todo}
                         />
-                        <h4 className={style.todoText}>{text}</h4>
+                        <h3 className={todo.completed ? style.completedTodoText : style.todoText}>
+                            {text}
+                        </h3>
                     </div>
                     <div>
-                        <MdDelete
+                        <GrClose
                             onClick={(e: Event) => {
                                 deleteTodo(todo.id);
                                 e.stopPropagation();

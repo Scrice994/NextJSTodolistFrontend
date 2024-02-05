@@ -11,7 +11,7 @@ interface UserModalProps{
 }
 
 export default function UserModal({ openLogInModal, openSignUpModal, onDismiss }: UserModalProps) {
-    const { data: user } = useGetUserQuery({});
+    const { data: user } = useGetUserQuery();
 
     return (
         <ModalContainer

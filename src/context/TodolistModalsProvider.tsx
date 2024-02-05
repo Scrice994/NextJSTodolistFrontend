@@ -10,6 +10,7 @@ interface ITodolistModalsContext{
     showAddTodoModal: () => void
     deleteAllTodoModal: boolean
     showDeleteAllTodoModal: () => void
+    updateTodoModal: boolean
     showUpdateTodoModal: () => void
     setTodoToUpdate: (todo: Todo) => void
 }
@@ -32,6 +33,7 @@ export default function TodolistModalsProvider({ children }: TodolistModalsProvi
         showAddTodoModal: () => setAddTodoModal(true),
         deleteAllTodoModal,
         showDeleteAllTodoModal: () => setDeleteAllTodoModal(true),
+        updateTodoModal,
         showUpdateTodoModal: () => setUpdateTodoModal(true),
         setTodoToUpdate: (todo: Todo) => setTodoToUpdate(todo)
     }

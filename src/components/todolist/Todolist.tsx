@@ -4,8 +4,8 @@ import { Todo as TodoModel } from "@/models/todo";
 import Todo from "@/components/todolist/Todo";
 
 export default function Todolist() {
-    const { data, isLoading, isSuccess, isError, error } = useGetTodosQuery({});
-    console.log(useGetTodosQuery({}));
+    const { data, isLoading, isSuccess, isError, error } = useGetTodosQuery();
+    console.log(useGetTodosQuery());
     let todosRender;
 
     if (isLoading) {

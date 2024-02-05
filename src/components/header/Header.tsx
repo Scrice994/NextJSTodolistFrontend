@@ -6,7 +6,7 @@ import { useAuthModalsContext } from '@/context/AuthModalsProvider';
 import CustomIcon from '../utils/CustomIcon';
 
 export default function Header (){
-    const { data: user } = useGetUserQuery({});
+    const { data: user } = useGetUserQuery();
     const { toggleUserModal } = useAuthModalsContext();
 
     return (

@@ -38,10 +38,10 @@ const UpdateTodoModal = ({ todo, onDismiss }: UpdateTodoModalProps) => {
     const onSubmit = async (formValues: UpdateTodoValues) => {
         try {
             if(todo){
-                updateTodo({
+                await updateTodo({
                     id: todo.id,
                     toUpdate: formValues
-                });
+                }).unwrap();
                 onDismiss();
             }
         } catch (error) {

@@ -44,11 +44,9 @@
     width: 100%;
     height: auto;
     margin: 10px auto;
-    border-radius: 10px;
-    border: 1px solid rgb(198, 186, 186);
+    border-bottom: 1px solid black;
     padding: 0;
     cursor: pointer;
-    background-color: #FFFFFF;
 }
 
 .todoFlex, .todoFlex2{
@@ -63,7 +61,7 @@
 }
 
 .todoFlex2{
-    border-bottom: 1px solid rgb(198, 186, 186);
+    border-bottom: 1px solid rgb(173, 163, 163);
 }
 
 .todoBody{
@@ -72,7 +70,7 @@
     display: flex;
 }
 
-.todoText{
+.todoText, .completedTodoText{
   overflow: hidden;  
   max-height: 100%;
   max-width: 100%;
@@ -81,6 +79,10 @@
   margin-left: 10px;
   margin-right: 5px;
   margin-bottom: 0;
+}
+
+.completedTodoText{
+    color: lightgray;
 }
 
 .todoFooter{

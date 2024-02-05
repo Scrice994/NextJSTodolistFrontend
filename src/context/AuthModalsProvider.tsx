@@ -3,6 +3,7 @@ import DropDownDialog from "@/components/modals/UserModal";
 import LogInModal from "@/components/modals/LogInModal";
 import SignUpModal from "@/components/modals/SignUpModal";
 import { createContext, useContext, useState } from "react";
+import CreateMemberModal from "@/components/modals/CreateMemberModal";
 
 interface IAuthModalsContext{
     signUpModal: boolean
@@ -11,6 +12,8 @@ interface IAuthModalsContext{
     showLogInModal: () => void
     userModal: boolean
     toggleUserModal: () => void
+    createMemberModal: boolean
+    showCreateMemberModal: () => void
 }
 
 export const AuthModalsContext = createContext<IAuthModalsContext | null>(null);
@@ -31,7 +34,9 @@ export default function AuthModalsProvider({ children }: AuthModalsProviderProps
         logInModal,
         showLogInModal: () => setLogInModal(true),
         userModal,
-        toggleUserModal: () => setUserModal(!userModal)
+        toggleUserModal: () => setUserModal(!userModal),
+        createMemberModal,
+        showCreateMemberModal: () => setCreateMemberModal(true)
     }
     
     return(
@@ -54,6 +59,11 @@ export default function AuthModalsProvider({ children }: AuthModalsProviderProps
                     openLogInModal={() => setLogInModal(true)}
                     openSignUpModal={() => setSignUpModal(true)} 
                     onDismiss={() => setUserModal(false)}
+                />
+            }
+            { createMemberModal &&
+                <CreateMemberModal
+                    onDismiss={() => setCreateMemberModal(false)}
                 />
             }
         </AuthModalsContext.Provider>

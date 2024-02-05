@@ -1,5 +1,3 @@
-import * as UserAPI from "@/network/services/UserService";
-import { BadRequestError, ConflictError, HttpError, TooManyRequestError, UnauthorizedError, isCustomError } from "@/network/http-errors";
 import { requiredStringSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
@@ -10,6 +8,8 @@ import CustomInputField from "../utils/CustomInputField";
 import PasswordInput from "../utils/PasswordInput";
 import ModalContainer from "./ModalContainer";
 import style from "../../styles/modals.module.css";
+import { useCreateNewMemberMutation } from "@/lib/features/api/userSlice";
+import { hasCustomErrorMessage } from "@/utils/hasCustomErrorMessage";
 
 const validationSchema = yup.object({
     username: requiredStringSchema,
@@ -19,32 +19,30 @@ const validationSchema = yup.object({
 type CreateMemberFormData = yup.InferType<typeof validationSchema>;
 
 interface CreateMemberModalProps{
-    openCreateMemberModal: () => void
     onDismiss: () => void
 }
 
-export default function CreateMemberModal({ openCreateMemberModal, onDismiss }: CreateMemberModalProps) {
-    const [showPassword, setShowPassword] = useState(false);
+export default function CreateMemberModal({ onDismiss }: CreateMemberModalProps) {
     const [errorText, setErrorText] = useState<string|null>(null);
     const [successfullMessage, setSuccessfullMessage] = useState(false);
-
+    const [createNewMember,{ error }] = useCreateNewMemberMutation();
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<CreateMemberFormData>({
         resolver: yupResolver(validationSchema),
     });
 
+    console.log(errorText)
+
     const onSubmit = async (credentials: CreateMemberFormData) => {
         try {
             setSuccessfullMessage(false);
             setErrorText(null);
-            const logUser = await UserAPI.createNewGroupMember(credentials);
+            await createNewMember(credentials).unwrap();
             setSuccessfullMessage(true)  
-        } catch (error) {
-            if (error instanceof ConflictError || error instanceof BadRequestError){
-                setErrorText(error.message);
-            } else {
-                setErrorText("Uknown error!")
-            } 
+        } catch (err) {
+            if(hasCustomErrorMessage(err)){
+                setErrorText(err.data.error);
+            }
         }
     }
 

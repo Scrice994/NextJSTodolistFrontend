@@ -3,6 +3,7 @@ import { useAppDispatch } from '@/lib/hooks';
 import { User } from '@/models/user';
 import style from "../../styles/modals.module.css";
 import { apiSlice } from '@/lib/features/api/apiSlice';
+import { useAuthModalsContext } from '@/context/AuthModalsProvider';
 
 interface OnlineUserModalContentProps{
     user: User
@@ -10,9 +11,11 @@ interface OnlineUserModalContentProps{
 }
 
 export default function OnlineUserModalContent({ user, onDismiss }: OnlineUserModalContentProps) {
-
+    const { showCreateMemberModal } = useAuthModalsContext();
     const [logout] = useLogoutMutation();
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
+
+    const isUserGroupAdmin = user.userRole === "Admin" && user.tenantId
 
     return (
         <>
@@ -23,10 +26,11 @@ export default function OnlineUserModalContent({ user, onDismiss }: OnlineUserMo
                 <div>{ user?.tenantId }</div> 
             </div>
             <hr style={{ marginTop: "0%" }}></hr>
-            {user.userRole === "Admin" &&
+            {isUserGroupAdmin &&
                 <button
                     className={style.button}
                     onClick={() => {
+                        showCreateMemberModal();
                         onDismiss();
                     }}
                 >
@@ -36,7 +40,7 @@ export default function OnlineUserModalContent({ user, onDismiss }: OnlineUserMo
             <button
                 className={style.button}
                 onClick={async () => {
-                    await logout({}).unwrap();
+                    await logout().unwrap();
                     dispatch(apiSlice.util.resetApiState());
                 }}
             >
