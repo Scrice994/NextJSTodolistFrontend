@@ -1,11 +1,10 @@
+import Header from '@/components/header/Header';
+import AuthModalsProvider from '@/context/AuthModalsProvider';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
-import './globals.css';
-import AuthModalsProvider from '@/context/AuthModalsProvider';
-import TodolistModalsProvider from '@/context/TodolistModalsProvider';
 import StoreProvider from './StoreProvider';
-import Header from '@/components/header/Header';
+import './globals.css';
 
 const inter = Raleway({ subsets: ['latin'], weight: ["100", "300", "400", "500", "700", "900"] })
 
@@ -15,20 +14,19 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <StoreProvider>
-          <AuthModalsProvider>
-                <TodolistModalsProvider>
-                  <Header />
-                  <main>
-                      {children}
-                  </main>
-              </TodolistModalsProvider>
-          </AuthModalsProvider>
-        </StoreProvider>
-      </body>
-    </html>
+    <StoreProvider>
+      <html lang="en">
+        <body className={inter.className}>
+            <AuthModalsProvider>
+                    <Header />
+                    <main>
+                        {children}
+                    </main>
+            </AuthModalsProvider>
+        </body>
+      </html>
+    </StoreProvider>
   )
 }

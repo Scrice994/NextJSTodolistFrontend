@@ -5,7 +5,7 @@ interface ModalContainerProps{
     children: ReactNode,
     modalStyle: string,
     overlayStyle: string,
-    onDismiss: () => void
+    onDismiss?: () => void
 }
 
 export default function ModalContainer({children, modalStyle, overlayStyle, onDismiss}:ModalContainerProps) {

@@ -1,14 +1,14 @@
-import { Todo as TodoModel } from "@/models/todo";
-import style from '../../styles/modals.module.css';
+import { useUpdateTodoMutation } from "@/lib/features/api/todoSlice";
+import { Todo } from "@/models/todo";
 import { formatDate } from "@/utils/formatDate";
 import { requiredStringSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import LoadingButton from "../utils/LoadingButton";
+import style from '../../styles/modals.module.css';
 import CustomInputField from "../utils/CustomInputField";
 import CustomTextAreaField from "../utils/CustomTextAreaField";
-import { useUpdateTodoMutation } from "@/lib/features/api/todoSlice";
+import LoadingButton from "../utils/LoadingButton";
 import ModalContainer from "./ModalContainer";
 
 const validationSchema = yup.object({
@@ -19,21 +19,22 @@ const validationSchema = yup.object({
 export type UpdateTodoValues = yup.InferType<typeof validationSchema>;
 
 interface UpdateTodoModalProps{
-    todo: TodoModel | null
+    todo: Todo | null
     onDismiss: () => void
 }
 
 const UpdateTodoModal = ({ todo, onDismiss }: UpdateTodoModalProps) => {
-    const { text, description, createdAt } = {...todo};
+   //const { data: todo } = useGetTodoQuery(todoId!);     
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<UpdateTodoValues>({
-        defaultValues: { text, description },
+        defaultValues: { text: todo?.text, description: todo?.description },
         resolver: yupResolver(validationSchema),
     });
 
     const [updateTodo] = useUpdateTodoMutation();
 
-    const todoCreatedAt = formatDate(createdAt!);
+    const todoCreatedAt = formatDate(todo?.createdAt!);
+    const todoUpdatedAt = formatDate(todo?.updatedAt!)
 
     const onSubmit = async (formValues: UpdateTodoValues) => {
         try {
@@ -66,7 +67,7 @@ const UpdateTodoModal = ({ todo, onDismiss }: UpdateTodoModalProps) => {
                     rows={2}
                 />
                 <div className={style.footer}>
-                    <p style={{marginBottom: "1em"}}>{todoCreatedAt}</p>
+                    <p style={{marginBottom: "1em"}}>{todoUpdatedAt ? todoUpdatedAt : todoCreatedAt}</p>
                     <div className={style.buttonContainer}>   
                         <LoadingButton
                             type="submit"

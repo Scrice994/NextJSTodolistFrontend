@@ -1,4 +1,4 @@
-import { useUpdateTodoMutation } from "@/lib/features/api/todoSlice";
+import { useToggleTodoMutation, useUpdateTodoMutation } from "@/lib/features/api/todoSlice";
 import { AnimatePresence, motion } from "framer-motion";
 import { Todo as TodoModel } from "../../models/todo";
 import style from "../../styles/todoList.module.css";
@@ -8,15 +8,10 @@ interface CheckButtonProps {
 }
 
 export const CheckButton = ({ todo }: CheckButtonProps) => {
-  const [updateTodo] = useUpdateTodoMutation();
+  const [toggleTodo] = useToggleTodoMutation();
 
   async function checkTodo(){
-    await updateTodo({
-      id: todo.id,
-      toUpdate: {
-        completed: !todo.completed
-      }
-    }).unwrap();
+    await toggleTodo(todo.id).unwrap();
   }
 
   return (

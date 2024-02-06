@@ -1,6 +1,5 @@
 import { Todo } from "@/models/todo";
 import { apiSlice } from "./apiSlice";
-import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 
 interface UpdateTodoArg{
     id: string
@@ -11,7 +10,17 @@ export const extendedApiSliceTodo = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getTodos: builder.query<Todo[], void>({
             query: () => "/todos",
-            providesTags: ["Todos"]
+            providesTags: (result) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'Todos' as const, id })),
+                  { type: 'Todos', id: 'LIST' },
+                ]
+              : [{ type: 'Todos', id: 'LIST' }],
+        }),
+        getTodo: builder.query<Todo[], string>({
+            query: (todoId) => "/todos/" + todoId,
+            providesTags: (result, error, arg) => [{ type: 'Todos', id: arg }]
         }),
         addNewTodo: builder.mutation<Todo, Partial<Todo>>({
             query: (initialTodo) => ({
@@ -19,11 +28,31 @@ export const extendedApiSliceTodo = apiSlice.injectEndpoints({
                 method: "POST",
                 body: initialTodo
             }),
-            invalidatesTags: ["Todos"]
+            invalidatesTags: [{type: 'Todos', id: 'LIST'}]
+        }),
+        toggleTodo: builder.mutation<Todo, string>({
+            query: (todoId) => ({
+                url: "/todos/toggle/" + todoId,
+                method: "PUT",
+            }),
+            async onQueryStarted(todoId, { dispatch, queryFulfilled }) {
+                const patchResult  = dispatch(
+                    extendedApiSliceTodo.util.updateQueryData("getTodos", undefined, draft => {
+                        return draft.map((todo: Todo) => 
+                            todo.id === todoId ? { ...todo, completed: !todo.completed } : todo     
+                        )
+                    })
+                )
+                try{
+                    await queryFulfilled
+                } catch {
+                    patchResult.undo()
+                }
+            }
         }),
         updateTodo: builder.mutation<Todo, UpdateTodoArg>({
             query: (todoToUpdate) => ({
-                url: "/todos/" + todoToUpdate.id,
+                url: "/todos/update/" + todoToUpdate.id,
                 method: "PUT",
                 body: todoToUpdate.toUpdate
             }),
@@ -40,24 +69,33 @@ export const extendedApiSliceTodo = apiSlice.injectEndpoints({
                 } catch {
                     patchResult.undo()
                 }
-            }
+            },
+            invalidatesTags: (result, error, arg) => [{ type: 'Todos', id: arg.id }]
         }),
         deleteTodo: builder.mutation<Todo, string>({
             query: (todoId) => ({
                 url: "/todos/" + todoId,
                 method: "DELETE"
             }),
-            invalidatesTags: ["Todos"],
+            invalidatesTags: [{type: 'Todos', id: 'LIST'}],
         }),
         deleteAllTodos: builder.mutation<unknown, void>({
             query: () => ({
                 url: "/todos/delete-todos",
                 method: "DELETE"
             }),
-            invalidatesTags: ["Todos"]
+            invalidatesTags: [{type: 'Todos', id: 'LIST'}]
         })
     }),
     overrideExisting: true
 });
 
-export const { useGetTodosQuery, useAddNewTodoMutation, useUpdateTodoMutation, useDeleteTodoMutation, useDeleteAllTodosMutation } = extendedApiSliceTodo
+export const { 
+    useGetTodosQuery,
+    useGetTodoQuery,
+    useAddNewTodoMutation, 
+    useUpdateTodoMutation, 
+    useDeleteTodoMutation, 
+    useDeleteAllTodosMutation, 
+    useToggleTodoMutation 
+} = extendedApiSliceTodo

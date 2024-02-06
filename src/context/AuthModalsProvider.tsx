@@ -4,6 +4,7 @@ import LogInModal from "@/components/modals/LogInModal";
 import SignUpModal from "@/components/modals/SignUpModal";
 import { createContext, useContext, useState } from "react";
 import CreateMemberModal from "@/components/modals/CreateMemberModal";
+import UpdateUserModal from "@/components/modals/UpdateUserModal";
 
 interface IAuthModalsContext{
     signUpModal: boolean
@@ -14,6 +15,7 @@ interface IAuthModalsContext{
     toggleUserModal: () => void
     createMemberModal: boolean
     showCreateMemberModal: () => void
+    showUpdateUserModal: () => void
 }
 
 export const AuthModalsContext = createContext<IAuthModalsContext | null>(null);
@@ -26,6 +28,7 @@ export default function AuthModalsProvider({ children }: AuthModalsProviderProps
     const [userModal, setUserModal] = useState(false);
     const [signUpModal, setSignUpModal] = useState(false);
     const [logInModal, setLogInModal] = useState(false);
+    const [updateUserModal, setUpdateUserModal] = useState(false);
     const [createMemberModal, setCreateMemberModal] = useState(false);
 
     const value = {
@@ -36,7 +39,8 @@ export default function AuthModalsProvider({ children }: AuthModalsProviderProps
         userModal,
         toggleUserModal: () => setUserModal(!userModal),
         createMemberModal,
-        showCreateMemberModal: () => setCreateMemberModal(true)
+        showCreateMemberModal: () => setCreateMemberModal(true),
+        showUpdateUserModal: () => setUpdateUserModal(true)
     }
     
     return(
@@ -59,6 +63,11 @@ export default function AuthModalsProvider({ children }: AuthModalsProviderProps
                     openLogInModal={() => setLogInModal(true)}
                     openSignUpModal={() => setSignUpModal(true)} 
                     onDismiss={() => setUserModal(false)}
+                />
+            }
+            { updateUserModal &&
+                <UpdateUserModal 
+                    onDismiss={() => setUpdateUserModal(false)}
                 />
             }
             { createMemberModal &&
