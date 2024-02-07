@@ -1,11 +1,10 @@
-import { verifyUser } from "@/network/services/UserService";
-import { NotFoundError } from "@/network/http-errors";
-import { notFound } from "next/navigation";
-import { BsCheckCircleFill } from "react-icons/bs"
-import style from "./page.module.css";
-import { User } from "@/models/user";
+"use client"
 import { Spinner } from "@/components/bootstrap";
 import RedirectButton from "@/components/utils/RedirectButton";
+import { useVerifyUserQuery } from "@/lib/features/api/userSlice";
+import { notFound } from "next/navigation";
+import { BsCheckCircleFill } from "react-icons/bs";
+import style from "./page.module.css";
 
 interface PageProps{
     searchParams: { 
@@ -14,32 +13,29 @@ interface PageProps{
     }
 }
 
-export default async function Page({ searchParams: { userId, verificationCode }}: PageProps){
+export default function Page({ searchParams: { userId, verificationCode }}: PageProps){
+    const { data, isLoading, error } = useVerifyUserQuery({ userId, verificationCode });
 
-    let user: User;
-    try {
-        user = await verifyUser(userId, verificationCode);
-        console.log(user);
-    } catch (error) {
-        if(error instanceof NotFoundError){
-            notFound();
-        } else {
-            throw error;
-        }
+    if(isLoading) return <Spinner />
+
+    if(error){
+        notFound();
     }
 
-    if(!user) return <Spinner />
-
-    return(
-        <div className={style.canvas}>
-            <div className={style.container}>
-                <BsCheckCircleFill size={100} className={style.icon}/>
-                <h1>Verified!</h1>
-                <p>You have successfully verified your acoount.</p>
-                <RedirectButton className={style.button}>
-                    Return to App
-                </RedirectButton>
+    if(data){
+        return (
+            <div className={style.canvas}>
+                <div className={style.container}>
+                    <BsCheckCircleFill size={100} className={style.icon}/>
+                    <h1>Verified!</h1>
+                    <p>You have successfully verified your acoount.</p>
+                    <RedirectButton className={style.button}>
+                        Return to App
+                    </RedirectButton>
+                </div>
             </div>
-        </div>
-    );
+        )
+    }
+
+    return(<></>);
 }

@@ -4,6 +4,11 @@ import { UpdateUserFormData } from "@/components/modals/UpdateUserModal";
 import { User } from "@/models/user";
 import { apiSlice } from "./apiSlice";
 
+interface VerifyUserQueryParams{
+    userId: string,
+    verificationCode: string
+}
+
 export const extendedApiSliceUser = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getUser: builder.query<User, void>({
@@ -24,6 +29,9 @@ export const extendedApiSliceUser = apiSlice.injectEndpoints({
                 body: credentials
             }),
             invalidatesTags: ["User", "Todos"]
+        }),
+        verifyUser: builder.query<User, VerifyUserQueryParams>({
+            query: (searchParams) => `/users/account-verification?userId=${searchParams.userId}&verificationCode=${searchParams.verificationCode}`
         }),
         logout: builder.mutation<unknown, void>({
             query: () => ({
@@ -52,7 +60,8 @@ export const extendedApiSliceUser = apiSlice.injectEndpoints({
 
 export const { 
     useGetUserQuery,
-    useSignupMutation, 
+    useSignupMutation,
+    useVerifyUserQuery, 
     useLoginMutation, 
     useLogoutMutation, 
     useCreateNewMemberMutation,
