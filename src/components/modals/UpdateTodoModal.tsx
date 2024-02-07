@@ -23,9 +23,7 @@ interface UpdateTodoModalProps{
     onDismiss: () => void
 }
 
-const UpdateTodoModal = ({ todo, onDismiss }: UpdateTodoModalProps) => {
-   //const { data: todo } = useGetTodoQuery(todoId!);     
-
+const UpdateTodoModal = ({ todo, onDismiss }: UpdateTodoModalProps) => {     
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<UpdateTodoValues>({
         defaultValues: { text: todo?.text, description: todo?.description },
         resolver: yupResolver(validationSchema),

@@ -1,23 +1,23 @@
-import { TooManyRequestError, UnauthorizedError } from "@/common/services/http-errors";
+import { useLoginMutation } from "@/lib/features/api/userSlice";
+import { hasCustomErrorMessage } from "@/utils/hasCustomErrorMessage";
 import { requiredStringSchema } from "@/utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import LoadingButton from "../utils/LoadingButton";
+import style from "../../styles/modals.module.css";
 import GoogleSignInButton from "../auth/GoogleSignInButton";
 import CustomInputField from "../utils/CustomInputField";
+import LoadingButton from "../utils/LoadingButton";
 import PasswordInput from "../utils/PasswordInput";
 import ModalContainer from "./ModalContainer";
-import style from "../../styles/modals.module.css";
-import { useLoginMutation } from "@/lib/features/api/userSlice";
 
 const validationSchema = yup.object({
     username: requiredStringSchema,
     password: requiredStringSchema,
 })
 
-type LoginFormData = yup.InferType<typeof validationSchema>;
+export type LoginFormData = yup.InferType<typeof validationSchema>;
 
 interface LogInModalProps{
     openSignUpModal: () => void
@@ -25,8 +25,6 @@ interface LogInModalProps{
 }
 
 export default function LogInModal({ openSignUpModal, onDismiss }: LogInModalProps) {
-
-    const [showPassword, setShowPassword] = useState(false);
     const [errorText, setErrorText] = useState<string|null>(null);
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
@@ -41,14 +39,9 @@ export default function LogInModal({ openSignUpModal, onDismiss }: LogInModalPro
             await login(credentials).unwrap();
             onDismiss();   
         } catch (error) {
-            if (error instanceof UnauthorizedError){
-                setErrorText("Invalid credentials");
-            } else if (error instanceof TooManyRequestError){
-                setErrorText("You're trying too often")
-            } else {
-                console.error(error);
-                alert(error);
-            } 
+            if(hasCustomErrorMessage(error)){
+                setErrorText(error.data.error);
+            }
         }
     }
 
@@ -60,7 +53,7 @@ export default function LogInModal({ openSignUpModal, onDismiss }: LogInModalPro
         >
             <header>
                 <h2 className={style.header}>Login</h2>
-                { errorText && <p style={{ color: 'red' }}>{ errorText }</p>}
+                { errorText && <p className={style.errorAlert}>{ errorText }</p>}
             </header>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <CustomInputField 

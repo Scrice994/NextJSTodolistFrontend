@@ -9,6 +9,7 @@ import CustomInputField from "../utils/CustomInputField";
 import LoadingButton from "../utils/LoadingButton";
 import ModalContainer from "./ModalContainer";
 import { useUdpateUserMutation } from "@/lib/features/api/userSlice";
+import { hasCustomErrorMessage } from "@/utils/hasCustomErrorMessage";
 
 const validationSchema = yup.object({
     username: usernameSchema.required("Username is required"),
@@ -35,14 +36,9 @@ export default function UpdateUserModal({ onDismiss }: UpdateUserModalProps) {
             updateUser(credentials).unwrap();
             onDismiss();   
         } catch (error) {
-            if (error instanceof UnauthorizedError){
-                setErrorText("Invalid credentials");
-            } else if (error instanceof TooManyRequestError){
-                setErrorText("You're trying too often")
-            } else {
-                console.error(error);
-                alert(error);
-            } 
+            if(hasCustomErrorMessage(error)){
+                setErrorText(error.data.error);
+            }
         }
     }
 

@@ -84,22 +84,20 @@
     margin-bottom: 1em;
 }
 
-.successAlert{
+.successAlert, .errorAlert{
     background-color: rgb(178, 243, 178);
     margin-bottom: 1.5em;
     border-radius: 10px;
     padding: 0.5em;
     border: 1px solid green;
     color: green;
+    text-align: center;
 }
 
-.error{
-    padding: 0.3em;
-    width: 100%;
-    height: 1.5em;
-    color: red;
-    margin: 0;
-    text-align: center;
+.errorAlert{
+    background-color: rgb(216, 150, 150);
+    border: 1px solid red;
+    color: rgb(129, 53, 53);
 }
 
 .button,

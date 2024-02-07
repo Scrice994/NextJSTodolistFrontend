@@ -1,12 +1,8 @@
+import { LoginFormData } from "@/components/modals/LogInModal";
+import { SignUpFormData } from "@/components/modals/SignUpModal";
+import { UpdateUserFormData } from "@/components/modals/UpdateUserModal";
 import { User } from "@/models/user";
 import { apiSlice } from "./apiSlice";
-import { LoginValues } from "@/common/interfaces/IUserService";
-import { hasCustomErrorMessage } from "@/utils/hasCustomErrorMessage";
-import { UpdateUserFormData } from "@/components/modals/UpdateUserModal";
-
-interface RTKError{
-    error: string
-}
 
 export const extendedApiSliceUser = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -14,7 +10,14 @@ export const extendedApiSliceUser = apiSlice.injectEndpoints({
             query: () => "/users/me",
             providesTags: ["User"]
         }),
-        login: builder.mutation<User, LoginValues>({
+        signup: builder.mutation<User, SignUpFormData>({
+            query: (crendentials) => ({
+                url: "/users/signup",
+                method: "POST",
+                body: crendentials
+            })
+        }),
+        login: builder.mutation<User, LoginFormData>({
             query: (credentials) => ({
                 url: "/users/login",
                 method: "POST",
@@ -37,7 +40,7 @@ export const extendedApiSliceUser = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["User"]
         }),
-        createNewMember: builder.mutation<User, LoginValues>({
+        createNewMember: builder.mutation<User, LoginFormData>({
             query: (credentials) => ({
                 url: "/users/group/create-member-account",
                 method: "POST",
@@ -48,7 +51,8 @@ export const extendedApiSliceUser = apiSlice.injectEndpoints({
 });
 
 export const { 
-    useGetUserQuery, 
+    useGetUserQuery,
+    useSignupMutation, 
     useLoginMutation, 
     useLogoutMutation, 
     useCreateNewMemberMutation,
